@@ -3,16 +3,85 @@
   "description": "Definition for fields used in the logger message processor",
   "type": "object",
   "properties": {
-    "correlationId": {
+    "track_id": {
       "type": "string",
       "sdk": {
-        "default": "#[correlationId]",
-        "placement": {
-          "tab": "Advanced"
-        }
+        "default": "#[correlationId]"
       }
     },
-    "message": {
+    "custom_uid": {
+      "type": "string",
+      "sdk": {
+        "default": ""
+      }
+    },
+    "source_app": {
+      "type": "string",
+      "sdk": {
+        "default": ""
+      }
+    },
+    "target_app": {
+      "type": "string",
+      "sdk": {
+        "default": ""
+      }
+    },
+    "method": {
+      "type": "string",
+      "sdk": {
+        "default": ""
+      }
+    },
+    "action_code": {
+      "type": "string",
+      "sdk": {
+        "default": ""
+      }
+    },
+    "resubmission": {
+      "type": "string",
+      "enum": [
+        "TRUE",
+        "FALSE"
+      ],
+      "sdk": {
+        "default": "FALSE",
+        "summary": "Resubmission flag"
+      }
+    },
+    "worker_id": {
+      "type": "string",
+      "sdk": {
+        "default": "#[server.ip]",
+        "summary": "Resubmission flag"
+      }
+    },
+    "start_date_time": {
+      "type": "string",
+      "sdk": {
+        "default": "#[now() as String {format : \"yyyy-MM-dd HH:mm:ss:SSS\"}]",
+        "required": true,
+        "summary": "Start of transaction"
+      }
+    },
+    "end_date_time": {
+      "type": "string",
+      "sdk": {
+        "default": "#[now() as String {format : \"yyyy-MM-dd HH:mm:ss:SSS\"}]",
+        "required": true,
+        "summary": "Start of transaction"
+      }
+    },
+    "status_date_time": {
+      "type": "string",
+      "sdk": {
+        "default": "#[now() as String {format : \"yyyy-MM-dd HH:mm:ss:SSS\"}]",
+        "required": true,
+        "summary": "Start of transaction"
+      }
+    },
+    "log_message": {
       "type": "string",
       "sdk": {
         "example": "Add a log message",
@@ -20,17 +89,7 @@
         "summary": "Message to be logged"
       }
     },
-    "content": {
-      "type": "string",
-      "javaType": "org.mule.runtime.extension.api.runtime.parameter.ParameterResolver<org.mule.runtime.api.metadata.TypedValue<java.io.InputStream>>",
-      "sdk": {
-        "default": "#[import modules::JSONLoggerModule output application/json ---\n{\n    payload: JSONLoggerModule::stringifyNonJSON(payload) \n}]",
-        "summary": "NOTE: Writing the entire payload every time across your application can cause serious performance issues",
-        "required": false,
-        "isContent": true
-      }
-    },
-    "tracePoint": {
+    "status": {
       "type": "string",
       "javaType": "org.mule.extension.jsonlogger.api.pojos.TracePoint",
       "enum": [
@@ -41,6 +100,7 @@
         "AFTER_REQUEST",
         "FLOW",
         "END",
+        "SUCCESS",
         "EXCEPTION"
       ],
       "sdk": {
@@ -64,6 +124,44 @@
       },
       "note": "This field is mandatory. DON'T REMOVE"
     },
+    "error_message": {
+      "type": "string",
+      "sdk": {
+        "example": "#[error.description]",
+        "required": false,
+        "default":null
+      }
+    },
+    "error_code": {
+      "type": "string",
+      "sdk": {
+        "example": "#[vars.httpStatus]",
+        "required": false,
+        "default":null
+      }
+    },
+    "error_stack": {
+      "type": "string",
+      "sdk": {
+        "example": "#[error.detailedDescription ++ error.cause]",
+        "required": false,
+        "default":null
+      }
+    },
+    "email_notification": {
+      "type": "string",
+      "sdk": {
+        "required": false,
+        "default":"N"
+      }
+    },
+    "itsm_notification": {
+      "type": "string",
+      "sdk": {
+        "required": false,
+        "default":"N"
+      }
+    },
     "category": {
       "type": "string",
       "sdk": {
@@ -72,12 +170,15 @@
       },
       "note": "This field is mandatory. DON'T REMOVE"
     },
-    "test": {
+    "payload": {
       "type": "string",
+      "javaType": "org.mule.runtime.extension.api.runtime.parameter.ParameterResolver<org.mule.runtime.api.metadata.TypedValue<Object>>",
       "sdk": {
-        "required": false
-      },
-      "note": "This field is mandatory. DON'T REMOVE"
+        "example": "#[import modules::JSONLoggerModule output application/json ---\n JSONLoggerModule::stringifyNonJSON(payload) ]",
+        "summary": "NOTE: Writing the entire payload every time across your application can cause serious performance issues",
+        "required": false,
+        "isContent": true
+      }
     }
   }
 }
