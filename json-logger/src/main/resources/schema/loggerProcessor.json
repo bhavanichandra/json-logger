@@ -71,6 +71,13 @@
         "summary": "If not set, by default will log to the org.mule.extension.jsonlogger.JsonLogger category"
       },
       "note": "This field is mandatory. DON'T REMOVE"
+    },
+    "test": {
+      "type": "string",
+      "sdk": {
+        "required": false
+      },
+      "note": "This field is mandatory. DON'T REMOVE"
     }
   }
 }
